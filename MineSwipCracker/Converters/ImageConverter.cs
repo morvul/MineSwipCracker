@@ -5,7 +5,7 @@ using System.IO;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
-namespace XOCracker.Converters
+namespace MineSwipCracker.Converters
 {
     public sealed class ImageConverter : IValueConverter
     {

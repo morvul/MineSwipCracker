@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
-using XOCracker.Enums;
-using XOCracker.Models;
-using XOCracker.Properties;
+using MineSwipCracker.Enums;
+using MineSwipCracker.Models;
+using MineSwipCracker.Properties;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
-namespace XOCracker
+namespace MineSwipCracker
 {
     public class GameProcess
     {
@@ -83,14 +83,8 @@ namespace XOCracker
 
         private void Update()
         {
-            PossibleCells = _gamePreset.OCellSprites
-                .Select(x => new KeyValuePair<ImageContainer, CellType>(new ImageContainer(x), CellType.OCell))
-                .Union(_gamePreset.XCellSprites
-                    .Select(x => new KeyValuePair<ImageContainer, CellType>(new ImageContainer(x), CellType.XCell)))
-                .Union(_gamePreset.FreeCellSprites
-                    .Select(x => new KeyValuePair<ImageContainer, CellType>(new ImageContainer(x), CellType.Free)))
-                .ToList();
-            TurnImage = new ImageContainer(_gamePreset.TurnSprite);
+            PossibleCells = new List<KeyValuePair<ImageContainer, CellType>>();
+            TurnImage = new ImageContainer(_gamePreset.RestartSprite);
             StartImage = new ImageContainer(_gamePreset.StartSprite);
             OnGameStateUpdated?.Invoke();
         }
@@ -210,7 +204,7 @@ namespace XOCracker
 
         private void MakeTurn()
         {
-            double stepCost;
+           /* double stepCost;
             var goodCell = BotLogic.GetStep(Board, _gamePreset.VinLength, _playerSide, out stepCost);
             if (goodCell != null)
             {
@@ -227,7 +221,7 @@ namespace XOCracker
                 }
             }
 
-            BoardInfo = $"Last step cost: {stepCost}";
+            BoardInfo = $"Last step cost: {stepCost}";*/
         }
 
         private CellType GetPlayerSide(Point turnCell)

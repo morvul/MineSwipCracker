@@ -13,7 +13,7 @@ using System.Windows.Interop;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using Point = System.Drawing.Point;
 
-namespace XOCracker
+namespace MineSwipCracker
 {
     /// <summary>
     /// Логика взаимодействия для ScreenshotRegion.xaml

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace XOCracker.Properties {
+namespace MineSwipCracker.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -164,18 +164,6 @@ namespace XOCracker.Properties {
             }
             set {
                 this["TopMost"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
-        public int VinLength {
-            get {
-                return ((int)(this["VinLength"]));
-            }
-            set {
-                this["VinLength"] = value;
             }
         }
         

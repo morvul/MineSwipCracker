@@ -1,10 +1,8 @@
-﻿<Window x:Class="XOCracker.MainWindow"
+﻿<Window x:Class="MineSwipCracker.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:converters="clr-namespace:XOCracker.Converters"
-        Title="XOCracker" Height="330" Width="480">
+        Title="MineSwip Cracker" Height="370" Width="480">
     <Window.Resources>
-        <converters:ImageConverter x:Key="ImageConverter"/>
         <Image x:Key="DirIcon" Source="Resources/kde_gnome_fs_directory_accept.png" MaxHeight="20"/>
         <Style x:Key="Flat" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Background" Value="#01000000" />
@@ -52,13 +50,13 @@
                             </UniformGrid>
                         </Button>
                     </GroupBox>
-                    <GroupBox Grid.Column="0" Grid.Row="1" Header="Turn indicator">
-                        <Button Name="TurnSpriteSelectionCommand" 
-                                    Click="TurnSpriteSelectionCommand_Click" 
+                    <GroupBox Grid.Column="0" Grid.Row="1" Header="Restart button">
+                        <Button Name="RestartSpriteSelectionCommand" 
+                                    Click="RestartSpriteSelectionCommand_Click" 
                                     Style="{StaticResource Flat}">
                             <UniformGrid Columns="1">
-                                <Image Name="TurnSprite" />
-                                <TextBlock Name="TurnSpriteText">Click to select a sprite region</TextBlock>
+                                <Image Name="RestartSprite" />
+                                <TextBlock Name="RestartSpriteText">Click to select a sprite region</TextBlock>
                             </UniformGrid>
                         </Button>
                     </GroupBox>
@@ -66,11 +64,9 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
@@ -111,99 +107,149 @@
                                              TextWrapping="Wrap" AcceptsReturn="True" Height="Auto"/>
                                 </Grid>
                             </GroupBox>
-                            <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Header="Game options">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
+                            <UniformGrid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Columns="3">
+                                <GroupBox  Header="Empty cell">
+                                    <Button Name="EmptyCellSpriteSelectionCommand" 
+                                    Click="EmptyCellSpriteSelectionCommand_Click" 
+                                    Style="{StaticResource Flat}">
+                                        <UniformGrid Columns="1">
+                                            <Image Name="EmptyCellSprite" />
+                                            <TextBlock Name="EmptyCellSpriteText">Click here</TextBlock>
+                                        </UniformGrid>
+                                    </Button>
+                                </GroupBox>
+                                <GroupBox  Header="Bonus cell">
+                                    <Button Name="BonusCellSpriteSelectionCommand" 
+                                    Click="BonusCellSpriteSelectionCommand_Click" 
+                                    Style="{StaticResource Flat}">
+                                        <UniformGrid Columns="1">
+                                            <Image Name="BonusCellSprite" />
+                                            <TextBlock Name="BonusCellSpriteText">Click here</TextBlock>
+                                        </UniformGrid>
+                                    </Button>
+                                </GroupBox>
+                                <GroupBox  Header="Bomb cell">
+                                    <Button Name="BombCellSpriteSelectionCommand" 
+                                    Click="BombCellSpriteSelectionCommand_Click" 
+                                    Style="{StaticResource Flat}">
+                                        <UniformGrid Columns="1">
+                                            <Image Name="BombCellSprite" />
+                                            <TextBlock Name="BombCellSpriteText">Click here</TextBlock>
+                                        </UniformGrid>
+                                    </Button>
+                                </GroupBox>
+                                <GroupBox  Header="Blast cell">
+                                    <Button Name="BlastCellSpriteSelectionCommand" 
+                                    Click="BlastCellSpriteSelectionCommand_Click" 
+                                    Style="{StaticResource Flat}">
+                                        <UniformGrid Columns="1">
+                                            <Image Name="BlastCellSprite" />
+                                            <TextBlock Name="BlastCellSpriteText">Click here</TextBlock>
+                                        </UniformGrid>
+                                    </Button>
+                                </GroupBox>
+                                <GroupBox  Header="Flag cell">
+                                    <Button Name="FlagCellSpriteSelectionCommand" 
+                                    Click="FlagCellSpriteSelectionCommand_Click" 
+                                    Style="{StaticResource Flat}">
+                                        <UniformGrid Columns="1">
+                                            <Image Name="FlagCellSprite" />
+                                            <TextBlock Name="FlagCellSpriteText">Click here</TextBlock>
+                                        </UniformGrid>
+                                    </Button>
+                                </GroupBox>
+                                <GroupBox  Header="Free cell">
+                                    <Button Name="FreeCellSpriteSelectionCommand" 
+                                    Click="FreeCellSpriteSelectionCommand_Click" 
+                                    Style="{StaticResource Flat}">
+                                        <UniformGrid Columns="1">
+                                            <Image Name="FreeCellSprite" />
+                                            <TextBlock Name="FreeCellSpriteText">Click here</TextBlock>
+                                        </UniformGrid>
+                                    </Button>
+                                </GroupBox>
+                                <GroupBox Header="1">
+                                    <Button Name="Cell1SpriteSelectionCommand" 
+                                    Click="Cell1SpriteSelectionCommand_Click" 
+                                    Style="{StaticResource Flat}">
+                                        <UniformGrid Columns="1">
+                                            <Image Name="Cell1Sprite" />
+                                            <TextBlock Name="Cell1SpriteText">Click here</TextBlock>
+                                        </UniformGrid>
+                                    </Button>
+                                </GroupBox>
+                                <GroupBox Header="2">
+                                    <Button Name="Cell2SpriteSelectionCommand" 
+                                    Click="Cell2SpriteSelectionCommand_Click" 
+                                    Style="{StaticResource Flat}">
+                                        <UniformGrid Columns="1">
+                                            <Image Name="Cell2Sprite" />
+                                            <TextBlock Name="Cell2SpriteText">Click here</TextBlock>
+                                        </UniformGrid>
+                                    </Button>
+                                </GroupBox>
+                                <GroupBox Header="3">
+                                    <Button Name="Cell3SpriteSelectionCommand" 
+                                    Click="Cell3SpriteSelectionCommand_Click" 
+                                    Style="{StaticResource Flat}">
+                                        <UniformGrid Columns="1">
+                                            <Image Name="Cell3Sprite" />
+                                            <TextBlock Name="Cell3SpriteText">Click here</TextBlock>
+                                        </UniformGrid>
+                                    </Button>
+                                </GroupBox>
+                                <GroupBox Header="4">
+                                    <Button Name="Cell4SpriteSelectionCommand" 
+                                    Click="Cell4SpriteSelectionCommand_Click" 
+                                    Style="{StaticResource Flat}">
+                                        <UniformGrid Columns="1">
+                                            <Image Name="Cell4Sprite" />
+                                            <TextBlock Name="Cell4SpriteText">Click here</TextBlock>
+                                        </UniformGrid>
+                                    </Button>
+                                </GroupBox>
+                                <GroupBox Header="5">
+                                    <Button Name="Cell5SpriteSelectionCommand" 
+                                    Click="Cell5SpriteSelectionCommand_Click" 
+                                    Style="{StaticResource Flat}">
+                                        <UniformGrid Columns="1">
+                                            <Image Name="Cell5Sprite" />
+                                            <TextBlock Name="Cell5SpriteText">Click here</TextBlock>
+                                        </UniformGrid>
+                                    </Button>
+                                </GroupBox>
 
-                                    <Label Content="Win length"/>
-                                    <TextBox Name="WinLengthField" Grid.Column="1" Grid.Row="0"
-                                             TextChanged="WinLengthFieldChanged"
-                                             PreviewTextInput="NumberValidationTextBox" DataObject.Pasting="TextBoxPasting"/>
-                                </Grid>
-                            </GroupBox>
-                            <GroupBox Grid.Column="0" Grid.Row="2" Header="Free cells">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <ListBox Name="FreeCellList" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <Button Click="FreeCellSpriteSelectionCommand_Click" 
-                                                    Tag ="{Binding}" Style="{StaticResource Flat}">
-                                                    <Image Source="{Binding Converter={StaticResource ImageConverter}}"
-                                                           MaxWidth="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelWidth}"/>
-                                                    <Button.ContextMenu>
-                                                        <ContextMenu>
-                                                            <MenuItem Header="Remove" Click="RemoveFreeCell_Click" Tag="{Binding}"/>
-                                                        </ContextMenu>
-                                                    </Button.ContextMenu>
-                                                </Button>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-                                    <Button Grid.Row="1" Click="AddNewFreeCellSprite_Click" Content="Add"/>
-                                </Grid>
-                            </GroupBox>
-                            <GroupBox Grid.Column="1" Grid.Row="2" Header="O cells">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <ListBox Name="OCellList" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <Button Click="OCellSpriteSelectionCommand_Click" 
-                                                    Tag ="{Binding}" Style="{StaticResource Flat}">
-                                                    <Image Source="{Binding Converter={StaticResource ImageConverter}}"
-                                                           MaxWidth="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelWidth}"/>
-                                                    <Button.ContextMenu>
-                                                        <ContextMenu>
-                                                            <MenuItem Header="Remove" Click="RemoveOCell_Click" Tag="{Binding}"/>
-                                                        </ContextMenu>
-                                                    </Button.ContextMenu>
-                                                </Button>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-                                    <Button Grid.Row="1" Click="AddNewOCellSprite_Click" Content="Add"/>
-                                </Grid>
-                            </GroupBox>
-                            <GroupBox Grid.Column="2" Grid.Row="2" Header="X cells">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <ListBox Name="XCellList" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <Button Click="XCellSpriteSelectionCommand_Click" 
-                                                    Tag ="{Binding}" Style="{StaticResource Flat}">
-                                                    <Image Source="{Binding Converter={StaticResource ImageConverter}}"
-                                                           MaxWidth="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelWidth}"/>
-                                                    <Button.ContextMenu>
-                                                        <ContextMenu>
-                                                            <MenuItem Header="Remove" Click="RemoveXCell_Click" Tag="{Binding}"/>
-                                                        </ContextMenu>
-                                                    </Button.ContextMenu>
-                                                </Button>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-                                    <Button Grid.Row="1" Click="AddNewXCellSprite_Click" Content="Add"/>
-                                </Grid>
-                            </GroupBox>
+                                <GroupBox Header="6">
+                                    <Button Name="Cell6SpriteSelectionCommand" 
+                                    Click="Cell6SpriteSelectionCommand_Click" 
+                                    Style="{StaticResource Flat}">
+                                        <UniformGrid Columns="1">
+                                            <Image Name="Cell6Sprite" />
+                                            <TextBlock Name="Cell6SpriteText">Click here</TextBlock>
+                                        </UniformGrid>
+                                    </Button>
+                                </GroupBox>
+                                <GroupBox Header="7">
+                                    <Button Name="Cell7SpriteSelectionCommand" 
+                                    Click="Cell7SpriteSelectionCommand_Click" 
+                                    Style="{StaticResource Flat}">
+                                        <UniformGrid Columns="1">
+                                            <Image Name="Cell7Sprite" />
+                                            <TextBlock Name="Cell7SpriteText">Click here</TextBlock>
+                                        </UniformGrid>
+                                    </Button>
+                                </GroupBox>
+                                <GroupBox Header="8">
+                                    <Button Name="Cell8SpriteSelectionCommand" 
+                                    Click="Cell8SpriteSelectionCommand_Click" 
+                                    Style="{StaticResource Flat}">
+                                        <UniformGrid Columns="1">
+                                            <Image Name="Cell8Sprite" />
+                                            <TextBlock Name="Cell8SpriteText">Click here</TextBlock>
+                                        </UniformGrid>
+                                    </Button>
+                                </GroupBox>
+                            </UniformGrid>
                         </Grid>
                     </GroupBox>
                     <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Margin="2">
@@ -232,14 +278,14 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    
+
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="2" BorderBrush="Gainsboro">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                        <UniformGrid Name="Board"/>
+                            <UniformGrid Name="Board"/>
                             <TextBox Name="BoardInfoField" IsReadOnly="True" Grid.Row="1"/>
                         </Grid>
                     </Border>
@@ -255,10 +301,10 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                    <UniformGrid Columns="1">
-                        <Button Name="StartCommand" Content="Start!" Click="StartCommand_OnClick"/>
-                        <Button Name="StopCommand" Content="Stop" Click="StopCommand_OnClick" Visibility="Collapsed"/>
-                    </UniformGrid>
+                        <UniformGrid Columns="1">
+                            <Button Name="StartCommand" Content="Start!" Click="StartCommand_OnClick"/>
+                            <Button Name="StopCommand" Content="Stop" Click="StopCommand_OnClick" Visibility="Collapsed"/>
+                        </UniformGrid>
                         <GroupBox Grid.Row="3" Header="Analysis accuracy">
                             <TextBox Name="AccuracyField" TextChanged="AccuracyChanged"
                                      PreviewTextInput="NumberValidationTextBox" DataObject.Pasting="TextBoxPasting"/>

@@ -1,7 +1,7 @@
-﻿<Application x:Class="XOCracker.App"
+﻿<Application x:Class="MineSwipCracker.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:XOCracker"
+             xmlns:local="clr-namespace:MineSwipCracker"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

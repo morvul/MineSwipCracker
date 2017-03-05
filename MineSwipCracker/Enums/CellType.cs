@@ -1,4 +1,4 @@
-﻿namespace XOCracker.Enums
+﻿namespace MineSwipCracker.Enums
 {
     public enum CellType : int
     {

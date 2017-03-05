@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
-using XOCracker.Enums;
+using MineSwipCracker.Enums;
 
-namespace XOCracker.Models
+namespace MineSwipCracker.Models
 {
     public struct Cell
     {

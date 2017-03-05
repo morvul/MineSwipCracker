@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
-namespace XOCracker
+namespace MineSwipCracker
 {
     public class ImageContainer
     {

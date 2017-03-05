@@ -3,17 +3,16 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using XOCracker.Enums;
-using XOCracker.Properties;
+using MineSwipCracker.Enums;
+using MineSwipCracker.Properties;
 using Image = System.Windows.Controls.Image;
 
-namespace XOCracker
+namespace MineSwipCracker
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
@@ -116,15 +115,6 @@ namespace XOCracker
             var cell = (Image)Board.Children[Board.Columns * row + column];
             switch (cellType)
             {
-                case CellType.Free:
-                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.FreeCellSprites.FirstOrDefault());
-                    break;
-                case CellType.OCell:
-                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.OCellSprites.FirstOrDefault());
-                    break;
-                case CellType.XCell:
-                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.XCellSprites.FirstOrDefault());
-                    break;
                 case CellType.Unknown:
                     cell.Source = new BitmapImage(new Uri("/Resources/11.gif", UriKind.Relative));
                     break;
@@ -247,17 +237,24 @@ namespace XOCracker
             BoardRowsField.Text = _gamePreset.Rows.ToString();
             BoardColumnsField.Text = _gamePreset.Columns.ToString();
             UpdateSpiteControlls(StartSprite, StartSpriteText, _gamePreset.StartSprite);
-            UpdateSpiteControlls(TurnSprite, TurnSpriteText, _gamePreset.TurnSprite);
+            UpdateSpiteControlls(RestartSprite, RestartSpriteText, _gamePreset.RestartSprite);
+            UpdateSpiteControlls(FreeCellSprite, FreeCellSpriteText, _gamePreset.FreeCellSprite);
+            UpdateSpiteControlls(BlastCellSprite, BlastCellSpriteText, _gamePreset.BlastCellSprite);
+            UpdateSpiteControlls(BombCellSprite, BombCellSpriteText, _gamePreset.BombCellSprite);
+            UpdateSpiteControlls(EmptyCellSprite, EmptyCellSpriteText, _gamePreset.EmptyCellSprite);
+            UpdateSpiteControlls(FlagCellSprite, FlagCellSpriteText, _gamePreset.FlagCellSprite);
+            UpdateSpiteControlls(BonusCellSprite, BonusCellSpriteText, _gamePreset.BonusCellSprite);
+            UpdateSpiteControlls(Cell1Sprite, Cell1SpriteText, _gamePreset.Cell1Sprite);
+            UpdateSpiteControlls(Cell2Sprite, Cell2SpriteText, _gamePreset.Cell2Sprite);
+            UpdateSpiteControlls(Cell3Sprite, Cell3SpriteText, _gamePreset.Cell3Sprite);
+            UpdateSpiteControlls(Cell4Sprite, Cell4SpriteText, _gamePreset.Cell4Sprite);
+            UpdateSpiteControlls(Cell5Sprite, Cell5SpriteText, _gamePreset.Cell5Sprite);
+            UpdateSpiteControlls(Cell6Sprite, Cell6SpriteText, _gamePreset.Cell6Sprite);
+            UpdateSpiteControlls(Cell7Sprite, Cell7SpriteText, _gamePreset.Cell7Sprite);
+            UpdateSpiteControlls(Cell8Sprite, Cell8SpriteText, _gamePreset.Cell8Sprite);
             GameProcessTab.IsEnabled = _gamePreset.IsReady();
-            FreeCellList.ItemsSource = _gamePreset.FreeCellSprites;
-            OCellList.ItemsSource = _gamePreset.OCellSprites;
-            XCellList.ItemsSource = _gamePreset.XCellSprites;
-            FreeCellList.Items.Refresh();
-            OCellList.Items.Refresh();
-            XCellList.Items.Refresh();
             FirstCellField.Text = _gamePreset.FirstCell.ToString();
             LastCellField.Text = _gamePreset.LastCell.ToString();
-            WinLengthField.Text = _gamePreset.VinLength.ToString();
         }
 
         private void UpdateSpiteControlls(Image spriteControl, TextBlock spriteTextControl, Bitmap bitmap)
@@ -287,22 +284,163 @@ namespace XOCracker
             }
         }
 
-        private void TurnSpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
-        {
-            ScreenshotRegion screener = new ScreenshotRegion(this);
-            if (screener.ShowDialog() == true)
-            {
-                _gamePreset.TurnSprite = screener.Picture;
-                UpdatePresetControls();
-            }
-        }
-
         private void FirstCellField_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             ScreenshotRegion screener = new ScreenshotRegion(this);
             if (screener.ShowDialog() == true)
             {
                 _gamePreset.FirstCell = screener.Rectangle;
+                UpdatePresetControls();
+            }
+        }
+
+
+        private void RestartSpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
+        {
+            ScreenshotRegion screener = new ScreenshotRegion(this);
+            if (screener.ShowDialog() == true)
+            {
+                _gamePreset.RestartSprite = screener.Picture;
+                UpdatePresetControls();
+            }
+        }
+
+        private void Cell1SpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
+        {
+            ScreenshotRegion screener = new ScreenshotRegion(this);
+            if (screener.ShowDialog() == true)
+            {
+                _gamePreset.Cell1Sprite = screener.Picture;
+                UpdatePresetControls();
+            }
+        }
+
+        private void Cell2SpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
+        {
+            ScreenshotRegion screener = new ScreenshotRegion(this);
+            if (screener.ShowDialog() == true)
+            {
+                _gamePreset.Cell2Sprite = screener.Picture;
+                UpdatePresetControls();
+            }
+        }
+
+        private void Cell3SpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
+        {
+            ScreenshotRegion screener = new ScreenshotRegion(this);
+            if (screener.ShowDialog() == true)
+            {
+                _gamePreset.Cell3Sprite = screener.Picture;
+                UpdatePresetControls();
+            }
+        }
+
+        private void Cell4SpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
+        {
+            ScreenshotRegion screener = new ScreenshotRegion(this);
+            if (screener.ShowDialog() == true)
+            {
+                _gamePreset.Cell4Sprite = screener.Picture;
+                UpdatePresetControls();
+            }
+        }
+
+        private void Cell5SpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
+        {
+            ScreenshotRegion screener = new ScreenshotRegion(this);
+            if (screener.ShowDialog() == true)
+            {
+                _gamePreset.Cell5Sprite = screener.Picture;
+                UpdatePresetControls();
+            }
+        }
+
+        private void Cell6SpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
+        {
+            ScreenshotRegion screener = new ScreenshotRegion(this);
+            if (screener.ShowDialog() == true)
+            {
+                _gamePreset.Cell6Sprite = screener.Picture;
+                UpdatePresetControls();
+            }
+        }
+        private void Cell7SpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
+        {
+            ScreenshotRegion screener = new ScreenshotRegion(this);
+            if (screener.ShowDialog() == true)
+            {
+                _gamePreset.Cell7Sprite = screener.Picture;
+                UpdatePresetControls();
+            }
+        }
+        private void Cell8SpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
+        {
+            ScreenshotRegion screener = new ScreenshotRegion(this);
+            if (screener.ShowDialog() == true)
+            {
+                _gamePreset.Cell8Sprite = screener.Picture;
+                UpdatePresetControls();
+            }
+        }
+
+
+        private void FreeCellSpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
+        {
+            ScreenshotRegion screener = new ScreenshotRegion(this);
+            if (screener.ShowDialog() == true)
+            {
+                _gamePreset.FreeCellSprite = screener.Picture;
+                UpdatePresetControls();
+            }
+        }
+
+
+        private void EmptyCellSpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
+        {
+            ScreenshotRegion screener = new ScreenshotRegion(this);
+            if (screener.ShowDialog() == true)
+            {
+                _gamePreset.EmptyCellSprite = screener.Picture;
+                UpdatePresetControls();
+            }
+        }
+
+        private void BombCellSpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
+        {
+            ScreenshotRegion screener = new ScreenshotRegion(this);
+            if (screener.ShowDialog() == true)
+            {
+                _gamePreset.BombCellSprite = screener.Picture;
+                UpdatePresetControls();
+            }
+        }
+
+        private void BlastCellSpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
+        {
+            ScreenshotRegion screener = new ScreenshotRegion(this);
+            if (screener.ShowDialog() == true)
+            {
+                _gamePreset.BlastCellSprite = screener.Picture;
+                UpdatePresetControls();
+            }
+        }
+
+        private void FlagCellSpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
+        {
+            ScreenshotRegion screener = new ScreenshotRegion(this);
+            if (screener.ShowDialog() == true)
+            {
+                _gamePreset.FlagCellSprite = screener.Picture;
+                UpdatePresetControls();
+            }
+        }
+
+        private void BonusCellSpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
+        {
+            ScreenshotRegion screener = new ScreenshotRegion(this);
+            if (screener.ShowDialog() == true)
+            {
+                _gamePreset.BonusCellSprite = screener.Picture;
                 UpdatePresetControls();
             }
         }
@@ -360,16 +498,6 @@ namespace XOCracker
             }
         }
 
-        private void WinLengthFieldChanged(object sender, TextChangedEventArgs e)
-        {
-            int vinLength;
-            if (int.TryParse(WinLengthField.Text, out vinLength))
-            {
-                _gamePreset.VinLength = vinLength;
-                UpdatePresetControls();
-            }
-        }
-
         private void SavePresetCommand_Click(object sender, RoutedEventArgs e)
         {
             _gamePreset.Save();
@@ -387,108 +515,7 @@ namespace XOCracker
             _gamePreset.Reset();
             UpdatePresetControls();
         }
-
-        private void OCellSpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
-        {
-            var image = (Bitmap)((Button)sender).Tag;
-            ScreenshotRegion screener = new ScreenshotRegion(this);
-            if (screener.ShowDialog() == true)
-            {
-                var itemIndex = _gamePreset.OCellSprites.IndexOf(image);
-                _gamePreset.OCellSprites.RemoveAt(itemIndex);
-                _gamePreset.OCellSprites.Insert(itemIndex, screener.Picture);
-                _gamePreset.HasChanges = true;
-                UpdatePresetControls();
-            }
-        }
-
-        private void XCellSpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
-        {
-            var image = (Bitmap)((Button)sender).Tag;
-            ScreenshotRegion screener = new ScreenshotRegion(this);
-            if (screener.ShowDialog() == true)
-            {
-                var itemIndex = _gamePreset.XCellSprites.IndexOf(image);
-                _gamePreset.XCellSprites.RemoveAt(itemIndex);
-                _gamePreset.XCellSprites.Insert(itemIndex, screener.Picture);
-                _gamePreset.HasChanges = true;
-                UpdatePresetControls();
-            }
-        }
-
-
-        private void FreeCellSpriteSelectionCommand_Click(object sender, RoutedEventArgs e)
-        {
-            var image = (Bitmap)((Button)sender).Tag;
-            ScreenshotRegion screener = new ScreenshotRegion(this);
-            if (screener.ShowDialog() == true)
-            {
-                var itemIndex = _gamePreset.FreeCellSprites.IndexOf(image);
-                _gamePreset.FreeCellSprites.RemoveAt(itemIndex);
-                _gamePreset.FreeCellSprites.Insert(itemIndex, screener.Picture);
-                _gamePreset.HasChanges = true;
-                UpdatePresetControls();
-            }
-        }
-        
-        private void AddNewFreeCellSprite_Click(object sender, RoutedEventArgs e)
-        {
-            ScreenshotRegion screener = new ScreenshotRegion(this);
-            if (screener.ShowDialog() == true)
-            {
-                _gamePreset.FreeCellSprites.Add(screener.Picture);
-                _gamePreset.HasChanges = true;
-                UpdatePresetControls();
-            }
-        }
-
-        private void AddNewOCellSprite_Click(object sender, RoutedEventArgs e)
-        {
-            ScreenshotRegion screener = new ScreenshotRegion(this);
-            if (screener.ShowDialog() == true)
-            {
-                _gamePreset.OCellSprites.Add(screener.Picture);
-                _gamePreset.HasChanges = true;
-                UpdatePresetControls();
-            }
-        }
-
-        private void AddNewXCellSprite_Click(object sender, RoutedEventArgs e)
-        {
-            ScreenshotRegion screener = new ScreenshotRegion(this);
-            if (screener.ShowDialog() == true)
-            {
-                _gamePreset.XCellSprites.Add(screener.Picture);
-                _gamePreset.HasChanges = true;
-                UpdatePresetControls();
-            }
-        }
-
-        private void RemoveOCell_Click(object sender, RoutedEventArgs e)
-        {
-            var image = (Bitmap)((MenuItem)sender).Tag;
-            _gamePreset.OCellSprites.Remove(image);
-            _gamePreset.HasChanges = true;
-            UpdatePresetControls();
-        }
-
-        private void RemoveXCell_Click(object sender, RoutedEventArgs e)
-        {
-            var image = (Bitmap)((MenuItem)sender).Tag;
-            _gamePreset.XCellSprites.Remove(image);
-            _gamePreset.HasChanges = true;
-            UpdatePresetControls();
-        }
-
-
-        private void RemoveFreeCell_Click(object sender, RoutedEventArgs e)
-        {
-            var image = (Bitmap)((MenuItem)sender).Tag;
-            _gamePreset.FreeCellSprites.Remove(image);
-            _gamePreset.HasChanges = true;
-            UpdatePresetControls();
-        }
-
+      
         private void OpenPresetDirCommand_Click(object sender, RoutedEventArgs e)
         {
             if (!Directory.Exists(_gamePreset.DirectoryPath))

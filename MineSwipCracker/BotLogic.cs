@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using XOCracker.Enums;
+using MineSwipCracker.Enums;
 
-namespace XOCracker
+namespace MineSwipCracker
 {
     public static class BotLogic
     {
