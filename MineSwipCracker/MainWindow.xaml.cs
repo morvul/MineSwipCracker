@@ -118,6 +118,48 @@ namespace MineSwipCracker
                 case CellType.Unknown:
                     cell.Source = new BitmapImage(new Uri("/Resources/11.gif", UriKind.Relative));
                     break;
+                case CellType.Free:
+                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.FreeCellSprite);
+                    break;
+                case CellType.Bomb:
+                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.BombCellSprite);
+                    break;
+                case CellType.Blast:
+                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.BlastCellSprite);
+                    break;
+                case CellType.Bonus:
+                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.BonusCellSprite);
+                    break;
+                case CellType.Empty:
+                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.EmptyCellSprite);
+                    break;
+                case CellType.Flag:
+                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.FlagCellSprite);
+                    break;
+                case CellType.Cell1:
+                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.Cell1Sprite);
+                    break;
+                case CellType.Cell2:
+                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.Cell2Sprite);
+                    break;
+                case CellType.Cell3:
+                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.Cell3Sprite);
+                    break;
+                case CellType.Cell4:
+                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.Cell4Sprite);
+                    break;
+                case CellType.Cell5:
+                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.Cell5Sprite);
+                    break;
+                case CellType.Cell6:
+                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.Cell6Sprite);
+                    break;
+                case CellType.Cell7:
+                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.Cell7Sprite);
+                    break;
+                case CellType.Cell8:
+                    cell.Source = SearchHelper.BitmapToImageSource(_gamePreset.Cell8Sprite);
+                    break;
             }
         }
 
@@ -186,6 +228,12 @@ namespace MineSwipCracker
             }
 
             _gameProcess.AnalysisAccuracy = int.Parse(AccuracyField.Text);
+
+            if (_gameProcess.AnalysisAccuracy > 10)
+            {
+                _gameProcess.AnalysisAccuracy = 10;
+                AccuracyField.Text = "10";
+            }
         }
 
 
@@ -515,7 +563,7 @@ namespace MineSwipCracker
             _gamePreset.Reset();
             UpdatePresetControls();
         }
-      
+
         private void OpenPresetDirCommand_Click(object sender, RoutedEventArgs e)
         {
             if (!Directory.Exists(_gamePreset.DirectoryPath))

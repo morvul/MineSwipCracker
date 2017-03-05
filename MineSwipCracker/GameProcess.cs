@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,7 +17,7 @@ namespace MineSwipCracker
 {
     public class GameProcess
     {
-        private const string ScreensDir = "Screenshots"; 
+        private const string ScreensDir = "Screenshots";
         private static readonly Random Rd = new Random();
         private readonly GamePreset _gamePreset;
         private readonly Window _appWindow;
@@ -26,13 +25,11 @@ namespace MineSwipCracker
         private Rectangle _winParams;
         private Task _monitoringProcess;
         private bool _isMonitoringRinning;
-        private CellType _playerSide;
 
         private GameProcess()
         {
             _isMonitoringRinning = false;
             _monitoringProcess = new Task(Monitoring);
-            _playerSide = CellType.XCell;
             UpdatedCells = new Queue<Cell>();
         }
 
@@ -83,7 +80,23 @@ namespace MineSwipCracker
 
         private void Update()
         {
-            PossibleCells = new List<KeyValuePair<ImageContainer, CellType>>();
+            PossibleCells = new List<KeyValuePair<ImageContainer, CellType>>
+            {
+                new KeyValuePair<ImageContainer, CellType>(new ImageContainer(_gamePreset.BombCellSprite), CellType.Bomb),
+                new KeyValuePair<ImageContainer, CellType>(new ImageContainer(_gamePreset.BlastCellSprite), CellType.Blast),
+                new KeyValuePair<ImageContainer, CellType>(new ImageContainer(_gamePreset.BonusCellSprite), CellType.Bonus),
+                new KeyValuePair<ImageContainer, CellType>(new ImageContainer(_gamePreset.EmptyCellSprite), CellType.Empty),
+                new KeyValuePair<ImageContainer, CellType>(new ImageContainer(_gamePreset.FlagCellSprite), CellType.Flag),
+                new KeyValuePair<ImageContainer, CellType>(new ImageContainer(_gamePreset.FreeCellSprite), CellType.Free),
+                new KeyValuePair<ImageContainer, CellType>(new ImageContainer(_gamePreset.Cell1Sprite), CellType.Cell1),
+                new KeyValuePair<ImageContainer, CellType>(new ImageContainer(_gamePreset.Cell2Sprite), CellType.Cell2),
+                new KeyValuePair<ImageContainer, CellType>(new ImageContainer(_gamePreset.Cell3Sprite), CellType.Cell3),
+                new KeyValuePair<ImageContainer, CellType>(new ImageContainer(_gamePreset.Cell4Sprite), CellType.Cell4),
+                new KeyValuePair<ImageContainer, CellType>(new ImageContainer(_gamePreset.Cell5Sprite), CellType.Cell5),
+                new KeyValuePair<ImageContainer, CellType>(new ImageContainer(_gamePreset.Cell6Sprite), CellType.Cell6),
+                new KeyValuePair<ImageContainer, CellType>(new ImageContainer(_gamePreset.Cell7Sprite), CellType.Cell7),
+                new KeyValuePair<ImageContainer, CellType>(new ImageContainer(_gamePreset.Cell8Sprite), CellType.Cell8)
+            };
             TurnImage = new ImageContainer(_gamePreset.RestartSprite);
             StartImage = new ImageContainer(_gamePreset.StartSprite);
             OnGameStateUpdated?.Invoke();
@@ -133,20 +146,16 @@ namespace MineSwipCracker
         private void Monitoring()
         {
             Update();
-            var isBoardUpdated = false;
             while (_isMonitoringRinning)
             {
                 var searchScreenObj = GetScreenShot();
-                var turnPoint = searchScreenObj.Find(TurnImage, 1, 0);
-                if (turnPoint != Point.Empty)
+                var isBoardUpdated = UpdateBoard(searchScreenObj);
+                if (IsGameStarted)
                 {
-                    isBoardUpdated = UpdateBoard(searchScreenObj);
-                    if (IsGameStarted)
-                    {
-                        MakeTurn();
-                    }
-               } 
-                else if(IsGameStarted)
+                    MakeTurn();
+                }
+
+                if (IsGameStarted)
                 {
                     var startPoint = searchScreenObj.Find(StartImage, 1, 0);
                     if (startPoint != Point.Empty)
@@ -204,35 +213,24 @@ namespace MineSwipCracker
 
         private void MakeTurn()
         {
-           /* double stepCost;
-            var goodCell = BotLogic.GetStep(Board, _gamePreset.VinLength, _playerSide, out stepCost);
-            if (goodCell != null)
-            {
-                if (stepCost >= 4 && stepCost < 100500)
-                {
-                    Thread.Sleep(Rd.Next(MaxTurnDelay));
-                }
+            /* double stepCost;
+             var goodCell = BotLogic.GetStep(Board, _gamePreset.VinLength, _playerSide, out stepCost);
+             if (goodCell != null)
+             {
+                 if (stepCost >= 4 && stepCost < 100500)
+                 {
+                     Thread.Sleep(Rd.Next(MaxTurnDelay));
+                 }
 
-                if (IsGameStarted)
-                {
-                    ClickCell(goodCell.Value);
-                    _playerSide = GetPlayerSide(goodCell.Value);
-                    SetBoardCell(new Cell(_playerSide, goodCell.Value.Y, goodCell.Value.X));
-                }
-            }
+                 if (IsGameStarted)
+                 {
+                     ClickCell(goodCell.Value);
+                     _playerSide = GetPlayerSide(goodCell.Value);
+                     SetBoardCell(new Cell(_playerSide, goodCell.Value.Y, goodCell.Value.X));
+                 }
+             }
 
-            BoardInfo = $"Last step cost: {stepCost}";*/
-        }
-
-        private CellType GetPlayerSide(Point turnCell)
-        {
-            Thread.Sleep(500);
-            var screen = GetScreenShot();
-            var cellType = UpdateCellType(turnCell.Y, turnCell.X, screen).CellType;
-            if (cellType != _playerSide)
-            {
-            }
-            return cellType;
+             BoardInfo = $"Last step cost: {stepCost}";*/
         }
 
         private void ClickCell(Point goodCell)
