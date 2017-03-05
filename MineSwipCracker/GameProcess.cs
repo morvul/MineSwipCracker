@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,9 +25,12 @@ namespace MineSwipCracker
         private Rectangle _winParams;
         private Task _monitoringProcess;
         private bool _isMonitoringRinning;
+        private bool _isGameOver;
+        private Stopwatch _timer;
 
         private GameProcess()
         {
+            _isGameOver = false;
             _isMonitoringRinning = false;
             _monitoringProcess = new Task(Monitoring);
             UpdatedCells = new Queue<Cell>();
@@ -155,29 +158,6 @@ namespace MineSwipCracker
                     MakeTurn();
                 }
 
-                if (IsGameStarted)
-                {
-                    var startPoint = searchScreenObj.Find(StartImage, 1, 0);
-                    if (startPoint != Point.Empty)
-                    {
-
-                        if (!Directory.Exists(ScreensDir))
-                        {
-                            Directory.CreateDirectory(ScreensDir);
-                        }
-
-                        var screen = Screen.FromHandle(_winHandle);
-                        var screenShot = SearchHelper.CaptureScreen(SearchHelper.MagicShift, SearchHelper.MagicShift,
-                            screen.Bounds.Width, screen.Bounds.Height, _winHandle);
-                        var fileName = $"{DateTime.Now.ToString("yyyy.MM.dd HH.mm.ss")}.bmp";
-                        fileName = Path.Combine(Environment.CurrentDirectory, ScreensDir, fileName);
-                        screenShot.Save(fileName);
-                        startPoint.X -= _gamePreset.StartSprite.Width / 2;
-                        startPoint.Y -= _gamePreset.StartSprite.Height / 2;
-                        Mouse.ClickIt(startPoint, MouseSpeed, Mouse.Buttons.Left);
-                    }
-                }
-
                 if (isBoardUpdated)
                 {
                     OnGameStateUpdated?.Invoke();
@@ -213,30 +193,51 @@ namespace MineSwipCracker
 
         private void MakeTurn()
         {
-            /* double stepCost;
-             var goodCell = BotLogic.GetStep(Board, _gamePreset.VinLength, _playerSide, out stepCost);
-             if (goodCell != null)
-             {
-                 if (stepCost >= 4 && stepCost < 100500)
-                 {
-                     Thread.Sleep(Rd.Next(MaxTurnDelay));
-                 }
+            if (_isGameOver)
+            {
+                Thread.Sleep(Rd.Next(MaxTurnDelay));
+                StopWatch();
+                return;
+            }
 
-                 if (IsGameStarted)
-                 {
-                     ClickCell(goodCell.Value);
-                     _playerSide = GetPlayerSide(goodCell.Value);
-                     SetBoardCell(new Cell(_playerSide, goodCell.Value.Y, goodCell.Value.X));
-                 }
-             }
 
-             BoardInfo = $"Last step cost: {stepCost}";*/
+            if (_timer == null || !_timer.IsRunning)
+            {
+                _timer = Stopwatch.StartNew();
+                BoardInfo = "Game in progres...";
+            }
+
+            var isNoTurn = true;
+            var steps = Logic.GetSteps(Board);
+            foreach (var keyValuePair in steps)
+            {
+                foreach (var point in keyValuePair.Value)
+                {
+                    Thread.Sleep(Rd.Next(MaxTurnDelay));
+                    ClickCell(point, keyValuePair.Key);
+                    isNoTurn = false;
+                }
+            }
+
+            if (isNoTurn)
+            {
+                StopWatch();
+            }
         }
 
-        private void ClickCell(Point goodCell)
+        private void StopWatch()
+        {
+            if (_timer != null && _timer.IsRunning)
+            {
+                _timer.Stop();
+                BoardInfo = $"Time lapsed: {_timer.ElapsedMilliseconds / 1000.0} sec.";
+            }
+        }
+
+        private void ClickCell(Point goodCell, Mouse.Buttons button)
         {
             var screenPoint = CellPosToPoint(goodCell);
-            Mouse.ClickIt(screenPoint, MouseSpeed, Mouse.Buttons.Left);
+            Mouse.ClickIt(screenPoint, MouseSpeed, button);
         }
 
         private Point CellPosToPoint(Point goodCell)
@@ -253,6 +254,7 @@ namespace MineSwipCracker
         private bool UpdateBoard(ImageContainer screen)
         {
             bool isBoardUpdated = false;
+            _isGameOver = false;
             if (Board.GetLength(0) != _gamePreset.Rows || Board.GetLength(1) != _gamePreset.Columns)
             {
                 Board = new CellType[_gamePreset.Rows, _gamePreset.Columns];
@@ -263,6 +265,7 @@ namespace MineSwipCracker
                 for (int column = 0; column < _gamePreset.Columns; column++)
                 {
                     var cell = UpdateCellType(row, column, screen);
+                    _isGameOver |= cell.CellType == CellType.Bomb || cell.CellType == CellType.Blast;
                     isBoardUpdated |= SetBoardCell(cell);
                 }
             }
