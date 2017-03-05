@@ -1,0 +1,291 @@
+﻿<Window x:Class="XOCracker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="clr-namespace:XOCracker.Converters"
+        Title="XOCracker" Height="330" Width="480">
+    <Window.Resources>
+        <converters:ImageConverter x:Key="ImageConverter"/>
+        <Image x:Key="DirIcon" Source="Resources/kde_gnome_fs_directory_accept.png" MaxHeight="20"/>
+        <Style x:Key="Flat" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#01000000" />
+            <Setter Property="BorderBrush" Value="{x:Null}" />
+            <Style.Triggers>
+                <Trigger Property="Control.IsMouseOver" Value="True">
+                    <Setter Property="Control.Background" Value="{x:Null}" />
+                    <Setter Property="Control.BorderBrush" Value="{x:Null}" />
+                    <Setter Property="Control.FontWeight" Value="Bold" />
+                </Trigger>
+                <Trigger Property="Control.IsFocused" Value="True">
+                    <Setter Property="Control.FontWeight" Value="Bold" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Height" Value="20"/>
+        </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <TabControl Name="TabControl" SelectionChanged="TabControl_OnSelectionChanged">
+            <TabItem Name="PresetsTab" Header="Presets">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <GroupBox Header="Start button">
+                        <Button Name="StartSpriteSelectionCommand" 
+                                    Click="StartSpriteSelectionCommand_Click" 
+                                    Style="{StaticResource Flat}">
+                            <UniformGrid Columns="1">
+                                <Image Name="StartSprite" />
+                                <TextBlock Name="StartSpriteText">Click to select a sprite region</TextBlock>
+                            </UniformGrid>
+                        </Button>
+                    </GroupBox>
+                    <GroupBox Grid.Column="0" Grid.Row="1" Header="Turn indicator">
+                        <Button Name="TurnSpriteSelectionCommand" 
+                                    Click="TurnSpriteSelectionCommand_Click" 
+                                    Style="{StaticResource Flat}">
+                            <UniformGrid Columns="1">
+                                <Image Name="TurnSprite" />
+                                <TextBlock Name="TurnSpriteText">Click to select a sprite region</TextBlock>
+                            </UniformGrid>
+                        </Button>
+                    </GroupBox>
+                    <GroupBox Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Header="Board">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <GroupBox Grid.ColumnSpan="3" Header="Size">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Label Content="Rows"/>
+                                    <TextBox Name="BoardRowsField" Grid.Column="1" Grid.Row="0"
+                                             TextChanged="BoardRowsFieldChanged"
+                                             PreviewTextInput="NumberValidationTextBox" DataObject.Pasting="TextBoxPasting"/>
+                                    <Label Grid.Column="2" Grid.Row="0" Content="Columns"/>
+                                    <TextBox Name="BoardColumnsField" Grid.Column="3" Grid.Row="0" 
+                                             TextChanged="BoardColumnsFieldChanged"
+                                             PreviewTextInput="NumberValidationTextBox" DataObject.Pasting="TextBoxPasting"/>
+
+                                    <Label Content="First cell" Grid.Row="1" Grid.Column="0"/>
+                                    <TextBox Name="FirstCellField" Grid.Column="1" Grid.Row="1" IsReadOnly="True" Background="LightBlue"
+                                             PreviewMouseDown="FirstCellField_OnMouseLeftButtonUp"
+                                             PreviewTextInput="NumberValidationTextBox" 
+                                             DataObject.Pasting="TextBoxPasting"
+                                             TextWrapping="Wrap" AcceptsReturn="True" Height="Auto"/>
+                                    <Label Grid.Column="2" Grid.Row="1" Content="Last cell"/>
+                                    <TextBox Name="LastCellField" Grid.Column="3" Grid.Row="1" IsReadOnly="True" Background="LightBlue"
+                                             PreviewMouseDown="LastCellField_OnMouseLeftButtonUp"
+                                             PreviewTextInput="NumberValidationTextBox"
+                                             DataObject.Pasting="TextBoxPasting"
+                                             TextWrapping="Wrap" AcceptsReturn="True" Height="Auto"/>
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Header="Game options">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Content="Win length"/>
+                                    <TextBox Name="WinLengthField" Grid.Column="1" Grid.Row="0"
+                                             TextChanged="WinLengthFieldChanged"
+                                             PreviewTextInput="NumberValidationTextBox" DataObject.Pasting="TextBoxPasting"/>
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox Grid.Column="0" Grid.Row="2" Header="Free cells">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <ListBox Name="FreeCellList" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Click="FreeCellSpriteSelectionCommand_Click" 
+                                                    Tag ="{Binding}" Style="{StaticResource Flat}">
+                                                    <Image Source="{Binding Converter={StaticResource ImageConverter}}"
+                                                           MaxWidth="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelWidth}"/>
+                                                    <Button.ContextMenu>
+                                                        <ContextMenu>
+                                                            <MenuItem Header="Remove" Click="RemoveFreeCell_Click" Tag="{Binding}"/>
+                                                        </ContextMenu>
+                                                    </Button.ContextMenu>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                    <Button Grid.Row="1" Click="AddNewFreeCellSprite_Click" Content="Add"/>
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox Grid.Column="1" Grid.Row="2" Header="O cells">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <ListBox Name="OCellList" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Click="OCellSpriteSelectionCommand_Click" 
+                                                    Tag ="{Binding}" Style="{StaticResource Flat}">
+                                                    <Image Source="{Binding Converter={StaticResource ImageConverter}}"
+                                                           MaxWidth="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelWidth}"/>
+                                                    <Button.ContextMenu>
+                                                        <ContextMenu>
+                                                            <MenuItem Header="Remove" Click="RemoveOCell_Click" Tag="{Binding}"/>
+                                                        </ContextMenu>
+                                                    </Button.ContextMenu>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                    <Button Grid.Row="1" Click="AddNewOCellSprite_Click" Content="Add"/>
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox Grid.Column="2" Grid.Row="2" Header="X cells">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <ListBox Name="XCellList" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Click="XCellSpriteSelectionCommand_Click" 
+                                                    Tag ="{Binding}" Style="{StaticResource Flat}">
+                                                    <Image Source="{Binding Converter={StaticResource ImageConverter}}"
+                                                           MaxWidth="{Binding RelativeSource={RelativeSource Self}, Path=Source.PixelWidth}"/>
+                                                    <Button.ContextMenu>
+                                                        <ContextMenu>
+                                                            <MenuItem Header="Remove" Click="RemoveXCell_Click" Tag="{Binding}"/>
+                                                        </ContextMenu>
+                                                    </Button.ContextMenu>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                    <Button Grid.Row="1" Click="AddNewXCellSprite_Click" Content="Add"/>
+                                </Grid>
+                            </GroupBox>
+                        </Grid>
+                    </GroupBox>
+                    <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Name="OpenPresetDirCommand" 
+                                Content="{StaticResource DirIcon}"
+                                Click="OpenPresetDirCommand_Click" 
+                                ToolTip="Open folder with saved sprites"
+                                Style="{StaticResource Flat}"/>
+                        <UniformGrid Grid.Column="2" Rows="1" >
+                            <Button Name="SavePresetCommand" Click="SavePresetCommand_Click" Content="Save Preset" ToolTip="Save current preset"/>
+                            <Button Name="CancelPresetCommand" Click="CancelPresetCommand_Click" Content="Cancel" ToolTip="Reset to the last saved preset"/>
+                            <Button Name="ResetPresetCommand" Click="ResetPresetCommand_Click" Content="Clear" ToolTip="Full reset of preset"/>
+                        </UniformGrid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Name="GameProcessTab" Header="Game process">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Border HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="2" BorderBrush="Gainsboro">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                        <UniformGrid Name="Board"/>
+                            <TextBox Name="BoardInfoField" IsReadOnly="True" Grid.Row="1"/>
+                        </Grid>
+                    </Border>
+                    <Separator Grid.Column="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                    <Grid Grid.Column="2" MinWidth="100">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                    <UniformGrid Columns="1">
+                        <Button Name="StartCommand" Content="Start!" Click="StartCommand_OnClick"/>
+                        <Button Name="StopCommand" Content="Stop" Click="StopCommand_OnClick" Visibility="Collapsed"/>
+                    </UniformGrid>
+                        <GroupBox Grid.Row="3" Header="Analysis accuracy">
+                            <TextBox Name="AccuracyField" TextChanged="AccuracyChanged"
+                                     PreviewTextInput="NumberValidationTextBox" DataObject.Pasting="TextBoxPasting"/>
+                        </GroupBox>
+                        <GroupBox Grid.Row="4" Header="Sprites Dispersion">
+                            <TextBox Name="DispersionField" TextChanged="DispersionChanged"
+                                     PreviewTextInput="NumberValidationTextBox" DataObject.Pasting="TextBoxPasting"/>
+                        </GroupBox>
+                        <GroupBox Grid.Row="5" Header="Update delay">
+                            <TextBox Name="DelayField" TextChanged="DelayChanged"
+                                     PreviewTextInput="NumberValidationTextBox" DataObject.Pasting="TextBoxPasting"/>
+                        </GroupBox>
+                        <GroupBox Grid.Row="6" Header="Mouse speed">
+                            <TextBox Name="MouseSpeedField" TextChanged="MouseSpeedChanged"
+                                     PreviewTextInput="NumberValidationTextBox" DataObject.Pasting="TextBoxPasting"/>
+                        </GroupBox>
+                        <GroupBox Grid.Row="7" Header="Max turn delay">
+                            <TextBox Name="MaxTurnDelayField" TextChanged="MaxTurnDelayFieldChanged"
+                                     PreviewTextInput="NumberValidationTextBox" DataObject.Pasting="TextBoxPasting"/>
+                        </GroupBox>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <CheckBox Name="SetOnTopFlag" Click="SetOnTopFlag_Click" Content="Set on Top" 
+                  HorizontalAlignment="Right" 
+                  VerticalAlignment="Top"
+                  Margin="3"/>
+    </Grid>
+</Window>
